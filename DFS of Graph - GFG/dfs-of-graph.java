@@ -40,17 +40,17 @@ class Solution {
         ArrayList<Integer> ans=new ArrayList<>();
         boolean[] visited=new boolean[V+1];
         Arrays.fill(visited,false);
-        dfs(ans,visited,0,adj);
+        dfs(ans,visited,adj,0);
         return ans;
-    }
-    public void dfs(ArrayList<Integer> ans,boolean[] visited,int i,ArrayList<ArrayList<Integer>> adj){
-        if(visited[i])
-        return;
-        visited[i]=true;
-        ans.add(i);
-        for(int x:adj.get(i)){
-            if(!visited[x])
-            dfs(ans,visited,x,adj);
         }
-    }
+        void dfs(ArrayList<Integer> ans,boolean[] visited, ArrayList<ArrayList<Integer>> adj,int i){
+            if(visited[i])
+                return;
+            ans.add(i);
+            visited[i]=true;
+            for(int x:adj.get(i)){
+                dfs(ans,visited,adj,x);
+            }
+        }
+    
 }
