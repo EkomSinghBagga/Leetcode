@@ -20,19 +20,26 @@ class Node {
 
 class Solution {
     public Node cloneGraph(Node node) {
-        if(node==null)
+      if(node==null)
             return null;
-        Map<Integer,Node> mp=new HashMap<>();
-        dfs(node,mp);
-        return mp.get(node.val);
+      Node copy=new Node(node.val);
+      Node[] visited=new Node[101];
+      Arrays.fill(visited,null);
+      dfs(node,copy,visited);
+      return copy;
     }
-    public void dfs(Node node,Map<Integer,Node> mp){
-        Node x=new Node(node.val,new ArrayList<Node>());
-        mp.put(node.val,x);
-        for(Node i:node.neighbors){
-            if(!mp.containsKey(i.val))
-                dfs(i,mp);
-            x.neighbors.add(mp.get(i.val));
+    public void dfs(Node node,Node copy,Node[] visited){
+        visited[copy.val]=copy;
+        for(Node n:node.neighbors){
+            if(visited[n.val]==null){
+                Node x=new Node(n.val);
+                copy.neighbors.add(x);
+                dfs(n,x,visited);
+            }
+            else{
+                copy.neighbors.add(visited[n.val]);
+            }
         }
     }
+    
 }
