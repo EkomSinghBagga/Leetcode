@@ -43,22 +43,26 @@ class Solution
 { 
     static int[] farNumber(int N, int Arr[])
 	{    
-	    int r=-1;
-	    for(int i=0;i<N;i++){
-	        r=-1;
-	        for(int j=N-1;j>i;j--){
-	            if(Arr[j]<Arr[i])
-	            {   
-	               r=j;
-	                break;
-	                
-	            }
-	            
-	        }
-	        Arr[i]=r;
-	       
-	    }
-	    return Arr;
-        
+	    int n=N;
+       int[] suffix=new int[n];
+       suffix[N-1]=Arr[n-1];
+       for(int i=N-2;i>=0;i--){
+           suffix[i]=Math.min(suffix[i+1],Arr[i]);
+       }
+        for(int i=0;i<N;i++){
+            int low=i+1,high=N-1,ans=-1;
+            while(low<=high){
+                int mid=low+(high-low)/2;
+                if(suffix[mid]<Arr[i])
+                {
+                    ans=mid;
+                    low=mid+1;
+                }
+                else
+                    high=mid-1;
+            }
+           Arr[i]=ans; 
+        }
+        return Arr;
 	}
 } 
