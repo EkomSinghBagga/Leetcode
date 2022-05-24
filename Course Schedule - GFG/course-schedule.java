@@ -71,10 +71,13 @@ class Solution
         ArrayList<ArrayList<Integer>> adj=new ArrayList<>();
         createGraph(adj,n,prerequisites);
         int[] indegree=new int[n];
-        for(int i=0;i<n;i++){
-            for(int it:adj.get(i)){
-                indegree[it]++;
-            }
+        // for(int i=0;i<n;i++){
+        //     for(int it:adj.get(i)){
+        //         indegree[it]++;
+        //     }
+        // }
+        for(ArrayList<Integer> it:prerequisites){
+            indegree[it.get(0)]++;
         }
         Queue<Integer> q=new LinkedList<>();
         int ind=0;
