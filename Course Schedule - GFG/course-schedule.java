@@ -65,95 +65,47 @@ class Main {
 
 class Solution
 {
-    static int[] findOrder(int n, int m, ArrayList<ArrayList<Integer>> prereq) 
+    static int[] findOrder(int n, int m, ArrayList<ArrayList<Integer>> prerequisites) 
     {
         // add your code here
-        int indegree[] = new int[n];
-        
-        //Calculate the indegree of each node.
-        for(int i=0; i<m; i++)
-        {
-            indegree[prereq.get(i).get(1)]++;
+        ArrayList<ArrayList<Integer>> adj=new ArrayList<>();
+        createGraph(adj,n,prerequisites);
+        int[] indegree=new int[n];
+        for(int i=0;i<n;i++){
+            for(int it:adj.get(i)){
+                indegree[it]++;
+            }
         }
-        
-        
-        //Create and adjacency list.
-        ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
-        
-        for(int i=0; i<n; i++)
-        {
+        Queue<Integer> q=new LinkedList<>();
+        int ind=0;
+        int[] topo=new int[n];
+        for(int i=0;i<n;i++){
+            if(indegree[i]==0)
+            q.add(i);
+        }
+    
+    while(!q.isEmpty()){
+        int node=q.poll();
+        topo[ind++]=node;
+        for(int it:adj.get(node)){
+            indegree[it]--;
+            if(indegree[it]==0)
+            {
+                q.add(it);
+            }
+        }
+    }
+    if(ind==n)
+    return topo;
+    return new int[0];
+}
+    static void createGraph(ArrayList<ArrayList<Integer>> adj,int n,ArrayList<ArrayList<Integer>> edge){
+        for(int i=0;i<n;i++){
             adj.add(new ArrayList<>());
         }
-        
-        for(int i=0; i<m; i++)
-        {
-            //The node which has any prerequisite points to its prerequisites.
-            int node1 = prereq.get(i).get(0);
-            int node2 = prereq.get(i).get(1);
-            
-            adj.get(node1).add(node2);
+        for(ArrayList<Integer> it:edge){
+            int u=it.get(0),v=it.get(1);
+            adj.get(v).add(u);
         }
-        
-        Queue<Integer> queue = new ArrayDeque<>();
-        
-        boolean visited[] = new boolean[n];
-        
-        for(int i=0; i<n; i++)
-        {
-            if(indegree[i]==0)
-            {
-                queue.add(i);
-                visited[i] = true;
-            }
-            
-        }
-        
-        
-        int ans[] = new int[n];
-        int count = 0;
-        
-        while(queue.isEmpty()==false)
-        {
-            int node = queue.poll();
-            ans[count++] = node;
-            visited[node] = true;
-            
-            for(int nei : adj.get(node))
-            {
-                if(visited[nei]==false)
-                {
-                    //Decrease the indegree of each unvisited neighbor.
-                    indegree[nei]--;
-                    
-                    if(indegree[nei]==0)
-                    {
-                        //If the indegree is zero then we can add to the queue.
-                        visited[nei] = true;
-                        queue.add(nei);
-                    }
-                }
-            }
-            
-            
-        }
-        
-        //Check if every node is visited else return an empty array.
-        for(int i=0; i<n; i++)
-        {
-            if(visited[i]==false) return new int[0];
-        }
-        
-        
-        //Reverse the answer
-        for(int i=0; i<n/2; i++)
-        {
-            int temp = ans[i];
-            ans[i] = ans[n-i-1];
-            ans[n-i-1] = temp;
-        }
-        
-        
-        return ans;
-        
     }
 }
