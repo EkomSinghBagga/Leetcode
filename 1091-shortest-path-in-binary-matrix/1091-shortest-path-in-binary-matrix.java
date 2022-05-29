@@ -1,27 +1,33 @@
 class Solution {
-    int min=Integer.MAX_VALUE;
+    int[][] dir={{1,1},{1,0},{0,1},{1,-1},{-1,1},{-1,0},{0,-1},{-1,-1}};
     public int shortestPathBinaryMatrix(int[][] grid) {
-        int[][] dir = {{1,1},{1,0},{0,1},{1,-1},{-1,1},{-1,0},{0,-1},{-1,-1}};
-        int m=grid.length,n=grid[0].length;
-        if(grid[0][0]==1) return -1; 
         Queue<int[]> q=new LinkedList<>();
-         q.offer(new int[]{0,0,1});
-        int ans=0;
+        int level=1;
+        if(grid[0][0]==1||grid[grid.length-1][grid[0].length-1]==1)
+            return -1;
+        if(grid.length==1&&grid[0].length==1&&grid[0][0]==0)
+            return 1;
+        q.offer(new int[]{0,0});
         while(!q.isEmpty()){
-            
-                int[] popped=q.poll();
-                int row=popped[0],col=popped[1],dis=popped[2];
-                if(row==m-1&&col==n-1)
-                    return dis;
+            int size=q.size();
+            while(size-->0){
+                int[] cur=q.poll();
                 for(int[] d:dir){
-                    int r2=row+d[0];
-                    int c2=col+d[1];
-                    if(r2<n&&r2>=0&&c2<n&&c2>=0&&grid[r2][c2]==0){
-                        q.offer(new int[]{r2,c2,dis+1});
-                        grid[r2][c2]=1;
+                    int i=cur[0]+d[0];
+                    int j=cur[1]+d[1];
+                     if(i==grid.length-1&&j==grid[0].length-1)
+                        return level+1;
+                    if(i<0||i>=grid.length||j<0||j>=grid[0].length||grid[i][j]==1)
+                        continue;
+                   
+                    if(grid[i][j]==0){
+                        grid[i][j]=1;
+                        q.offer(new int[]{i,j});
                     }
+                        
                 }
-            
+            }
+            level++;
         }
         return -1;
     }
