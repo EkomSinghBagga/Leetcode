@@ -3,8 +3,8 @@ class NumMatrix {
     public NumMatrix(int[][] matrix) {
         if(matrix.length==0||matrix[0].length==0) return;
         dp=new int[matrix.length+1][1+matrix[0].length];
-        for(int i=0;i<matrix.length;i++){
-            for(int j=0;j<matrix[0].length;j++){
+        for(int i=0;i<matrix.length;++i){
+            for(int j=0;j<matrix[0].length;++j){
                 dp[i+1][j+1]=dp[i+1][j]+dp[i][j+1]-dp[i][j]+matrix[i][j];
             }
         }
