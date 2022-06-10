@@ -1,17 +1,21 @@
 class Solution {
     public List<String> letterCombinations(String digits) {
-        LinkedList<String> ans = new LinkedList<String>();
-		if(digits.isEmpty()) return ans;
-		String[] mapping = new String[] {"0", "1", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
-		ans.add("");
-		for(int i =0; i<digits.length();i++){
-			int x = Character.getNumericValue(digits.charAt(i));
-			while(ans.peek().length()==i){
-				String t = ans.remove();
-				for(char s : mapping[x].toCharArray())
-					ans.add(t+s);
-			}
-		}
-		return ans;
+        List<String> ans=new ArrayList<>();
+        if(digits.equals(""))
+            return ans;
+        String[] map={"0","1","abc","def","ghi","jkl","mno","pqrs","tuv","wxyz"};
+        backtrack(map,ans,digits,"");
+        return ans;
+    }
+    public void backtrack(String[] map,List<String> ans,String digits,String cur){
+        if(cur.length()==digits.length()){
+            ans.add(cur);
+            return;
+        }
+        int i=cur.length();
+        int digit=digits.charAt(i)-'0';
+        for(char ch:map[digit].toCharArray()){
+            backtrack(map,ans,digits,cur+ch);
+        }
     }
 }
