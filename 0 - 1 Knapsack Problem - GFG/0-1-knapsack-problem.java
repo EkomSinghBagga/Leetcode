@@ -48,24 +48,23 @@ class gfg
 class Solution 
 { 
     //Function to return max value that can be put in knapsack of capacity W.
-    static Integer[][] memo;
     static int knapSack(int W, int wt[], int val[], int n) 
     { 
-         // your code here 
-         memo=new Integer[wt.length+1][W+1];
-         return solve(wt,val,W,n);
+         // your code here
+         int[][] dp=new int[n+1][W+1];
+         for(int i=0;i<=n;i++){
+             for(int j=0;j<=W;j++){
+                 if(i==0||j==0)
+                 dp[i][j]=Math.min(i,j);
+                 else if(wt[i-1]<=j){
+                     dp[i][j]=Math.max(dp[i-1][j],val[i-1]+dp[i-1][j-wt[i-1]]);
+                 }
+                 else
+                    dp[i][j]=dp[i-1][j];
+             }
+         }
+         return dp[wt.length][W];
     } 
-    public static int solve(int[] wt,int[] val,int W,int n){
-        if(n==0)
-        return 0;
-        if(W==0)
-        return 0;
-        if(memo[n][W]!=null)
-        return memo[n][W];
-        if(wt[n-1]<=W)
-        return memo[n][W]=Math.max(val[n-1]+solve(wt,val,W-wt[n-1],n-1),solve(wt,val,W,n-1));
-        return memo[n][W]=solve(wt,val,W,n-1);
-    }
 }
 
 
