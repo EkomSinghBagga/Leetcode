@@ -42,12 +42,20 @@ class Solution
     public static ArrayList<Integer> kLargest(int arr[], int n, int k)
     {
         // code here 
-        PriorityQueue<Integer> pq=new PriorityQueue<>(Collections.reverseOrder());
-        for(int i:arr)
-        pq.offer(i);
-        ArrayList<Integer> ans=new ArrayList<Integer>();
-        for(int i=0;i<k;i++)
-        ans.add(pq.poll());
+        PriorityQueue<Integer> pq=new PriorityQueue<>();
+        for(int i=0;i<k;i++){
+            pq.offer(arr[i]);
+        }
+        for(int i=k;i<n;i++){
+            if(arr[i]>pq.peek())
+            {
+                pq.poll();
+                pq.offer(arr[i]);
+            }
+        }
+        ArrayList<Integer> ans=new ArrayList<>(pq);
+        Collections.sort(ans);
+        Collections.reverse(ans);
         return ans;
     }
 }
