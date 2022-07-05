@@ -1,41 +1,36 @@
 class Solution {
-    public boolean canFinish(int num, int[][] edges) {
-        ArrayList<ArrayList<Integer>> adj=new ArrayList<>();
-        creategraph(adj,edges,num);
-        int[] indegree=new int[num];
-        for(int i=0;i<num;i++){
-            for(int it:adj.get(i)){
-                indegree[it]++;
+    public boolean canFinish(int n, int[][] prerequisites) {
+        List<List<Integer>> adj=new ArrayList<>();
+        createGraph(adj,n,prerequisites);
+        int[] indegree=new int[n];
+        for(int i=0;i<n;i++){
+            for(int j:adj.get(i)){
+                indegree[j]++;
             }
         }
         Queue<Integer> q=new LinkedList<>();
-        for(int i=0;i<num;i++){
+       List<Integer> topo=new ArrayList<>();
+        for(int i=0;i<n;i++){
             if(indegree[i]==0)
                 q.offer(i);
         }
-        int ind=0;
-        int[] topo=new int[num];
         while(!q.isEmpty()){
-            int node=q.poll();
-            topo[ind++]=node;
-            for(int it:adj.get(node)){
-                indegree[it]--;
-                if(indegree[it]==0)
-                    q.add(it);
+            int cur=q.poll();
+            topo.add(cur);
+            for(int j:adj.get(cur))
+            {
+                indegree[j]--;
+                if(indegree[j]==0)
+                    q.offer(j);
             }
         }
-        if(ind==num)
-            return true;
-        return false;
-        
+        return topo.size()==n;
     }
-    public void creategraph(ArrayList<ArrayList<Integer>> adj,int[][] edges,int n){
-        for(int i=0;i<n;i++){
+    public void createGraph(List<List<Integer>> adj,int n,int[][] edges){
+        for(int i=0;i<n;i++)
             adj.add(new ArrayList<>());
-        }
-        for(int[] edge:edges){
-            int u=edge[0],v=edge[1];
-            adj.get(v).add(u);
+        for(int[] e:edges){
+            adj.get(e[1]).add(e[0]);
         }
     }
 }
