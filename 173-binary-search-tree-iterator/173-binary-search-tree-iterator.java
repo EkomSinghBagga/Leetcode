@@ -14,29 +14,29 @@
  * }
  */
 class BSTIterator {
-    ArrayList<Integer> a=new ArrayList<>();
+    List<Integer> ans;
+    int ind;
     public BSTIterator(TreeNode root) {
-        inorder(a,root);
+        ans=new ArrayList<>();
+       solve(root); 
+       ind=0;
     }
-    public void inorder(ArrayList<Integer> a,TreeNode root){
-        if(root==null)
-            return;
-        inorder(a,root.left);
-        a.add(root.val);
-        inorder(a,root.right);
-    }
-    public int next() {
-        if(hasNext())
-        {
-            int ans=a.get(0);
-            a.remove(0);
-            return ans;
+    public void solve(TreeNode root){
+        if(root==null) return ;
+        if(root.left!=null){
+            solve(root.left);
         }
-        return 0;
+        ans.add(root.val);
+        if(root.right!=null)
+            solve(root.right);
+    }
+    
+    public int next() {
+        return ans.get(ind++);
     }
     
     public boolean hasNext() {
-    return a.size()!=0;
+        return ind<ans.size();
     }
 }
 
