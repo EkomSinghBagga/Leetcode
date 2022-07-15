@@ -1,41 +1,39 @@
 class Solution {
     public List<List<Integer>> pacificAtlantic(int[][] heights) {
+        int n=heights.length,m=heights[0].length;
+        boolean[][] atlantic=new boolean[n][m];
+        boolean[][] pacific=new boolean[n][m];
+        for(int i=0;i<n;i++){
+          dfs(heights,i,0,0,pacific);
+          dfs(heights,i,m-1,0,atlantic);
+        }
+        for(int i=0;i<m;i++){
+          dfs(heights,0,i,0,pacific);
+          dfs(heights,n-1,i,0,atlantic);
+        }
         List<List<Integer>> ans=new ArrayList<>();
-        boolean[][] atlantic=new boolean[heights.length][heights[0].length];
-        boolean[][] pacific=new boolean[heights.length][heights[0].length];
-        for(int i=0;i<heights.length;i++){
-            dfs1(heights,i,0,0,pacific);
-            dfs1(heights,i,heights[0].length-1,0,atlantic);
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(pacific[i][j]&&atlantic[i][j]){
+                    List<Integer> cur=new ArrayList<>();
+                    cur.add(i);cur.add(j);
+                    ans.add(cur);
+                }
+            }
         }
-        for(int i=0;i<heights[0].length;i++){
-            dfs1(heights,0,i,0,pacific);
-            dfs1(heights,heights.length-1,i,0,atlantic);
-        }
-       for(int i=0;i<heights.length;++i){
-           for(int j=0;j<heights[0].length;++j){
-               if(atlantic[i][j]&&pacific[i][j])
-               {
-                   List<Integer> l=new ArrayList<>();
-                   l.add(i);
-                   l.add(j);
-                   ans.add(l);
-               }  
-           }
-       }
         return ans;
         
     }
-    int[][] dir={{1,0},{0,1},{-1,0},{0,-1}};
-    public void dfs1(int[][] heights,int i,int j,int prev,boolean[][] visited){
-          if(i<0||i>=heights.length||j<0||j>=heights[0].length)
-              return ;
-        if(heights[i][j]<prev||visited[i][j])
+        int[][] dirs={{1,0},{0,1},{-1,0},{0,-1}};
+    public void dfs(int[][] heights,int i,int j,int prev,boolean[][] visited){
+        if(i<0||i>=heights.length||j<0|j>=heights[0].length)
             return;
-        
+        if(prev>heights[i][j]||visited[i][j])
+            return;
+        prev=heights[i][j];
         visited[i][j]=true;
-        for(int[] d:dir){
-            dfs1(heights,i+d[0],j+d[1],heights[i][j],visited);
+        for(int[] d:dirs){
+            dfs(heights,i+d[0],j+d[1],prev,visited);
         }
     }
-
 }
