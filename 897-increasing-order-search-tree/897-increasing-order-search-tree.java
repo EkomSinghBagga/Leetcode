@@ -14,28 +14,23 @@
  * }
  */
 class Solution {
-    public void inorder(TreeNode root,ArrayList<Integer> a){
+    public TreeNode increasingBST(TreeNode root) {
+        List<Integer> in=new ArrayList<>();
+        inorder(root,in);
+        TreeNode ans=new TreeNode(in.get(0));
+        TreeNode cur=ans;
+        for(int i=1;i<in.size();i++){
+            cur.right=new TreeNode(in.get(i));
+            cur.left=null;
+            cur=cur.right;
+        }
+        return ans;
+    }
+    public void inorder(TreeNode root,List<Integer> in){
         if(root==null)
             return;
-        inorder(root.left,a);
-        a.add(root.val);
-        inorder(root.right,a);
-    }
-    public TreeNode increasingBST(TreeNode root) {
-        if(root==null)
-            return root;
-      ArrayList<Integer> a=new ArrayList<>();
-      inorder(root,a);
-        // for(int i:a)
-        //     System.out.print(i);
-       TreeNode ans=new TreeNode(a.get(0)),dummy=ans;
-        
-        ans.left=null;
-        for(int i=1;i<a.size();i++){
-            ans.right=new TreeNode(a.get(i));
-            ans.left=null;
-            ans=ans.right;
-        }
-        return dummy;
+        inorder(root.left,in);
+        in.add(root.val);
+        inorder(root.right,in);
     }
 }
